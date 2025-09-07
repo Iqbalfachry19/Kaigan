@@ -1,0 +1,40 @@
+{
+  "name": "clob-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@solana/wallet-adapter-base": "^0.9.27",
+    "@solana/wallet-adapter-phantom": "^0.9.28",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
+    "@solana/wallet-adapter-wallets": "^0.19.37",
+    "@solana/web3.js": "^1.91.37",
+    "@tailwindcss/postcss": "^4.1.13",
+    "bn.js": "^5.2.1",
+    "lightweight-charts": "^4.1.5",
+    "lucide-react": "^0.542.0",
+    "next": "15.5.2",
+    "postcss": "^8.5.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-hot-toast": "^2.4.1",
+    "tailwindcss": "^4.1.13",
+    "tradingview": "^1.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.13",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "typescript": "^5"
+  }
+}
