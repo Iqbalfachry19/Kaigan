@@ -139,3 +139,113 @@ Before running this application, make sure you have:
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
+kaigan-dex/
+├── frontend/ # Next.js frontend application
+│ ├── src/
+│ │ ├── app/ # Next.js 13+ App Router
+│ │ │ ├── layout.tsx # Root layout
+│ │ │ ├── page.tsx # Main page
+│ │ │ └── globals.css # Global styles
+│ │ ├── components/ # React components
+│ │ │ ├── OrderForm.tsx # Order placement form
+│ │ │ ├── OrderBook.tsx # Live order book
+│ │ │ ├── PriceChart.tsx # TradingView charts
+│ │ │ ├── TradingStats.tsx# Market statistics
+│ │ │ └── WalletButton.tsx# Wallet connection
+│ │ ├── hooks/ # Custom React hooks
+│ │ └── lib/ # Utility libraries
+│ └── package.json
+├── programs/ # Anchor smart contracts
+│ └── clob/
+│ ├── src/
+│ │ └── lib.rs # Main smart contract
+│ └── Cargo.toml
+├── tests/ # Test files
+├── migrations/ # Deployment scripts
+├── Anchor.toml # Anchor configuration
+└── README.md # This file
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env.local` file in the frontend directory:
+
+```env
+NEXT_PUBLIC_SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+NEXT_PUBLIC_PROGRAM_ID=your_program_id_here
+```
+
+### Smart Contract Configuration
+
+Update `Anchor.toml` for your network:
+
+```toml
+[provider]
+cluster = "devnet"  # or "mainnet-beta"
+wallet = "~/.config/solana/id.json"
+```
+
+## 🎯 Usage
+
+### Connecting a Wallet
+
+1. Click the "Select Wallet" button in the header
+2. Choose your preferred Solana wallet (Phantom recommended)
+3. Approve the connection in your wallet
+
+### Placing Orders
+
+1. Navigate to the "Place Order" section
+2. Select order type (Limit or Market)
+3. Choose side (Buy or Sell)
+4. Enter price (for limit orders) and quantity
+5. Click "Place Order" to submit
+
+### Viewing Charts
+
+- Use the interactive TradingView chart in the left panel
+- Zoom and pan using mouse controls
+- Add technical indicators from the toolbar
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow TypeScript best practices
+- Use meaningful commit messages
+- Test your changes thoroughly
+- Update documentation as needed
+- Follow the existing code style
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Solana](https://solana.com/) - High-performance blockchain
+- [TradingView](https://www.tradingview.com/) - Professional charting
+- [Anchor](https://www.anchor-lang.com/) - Solana framework
+- [Next.js](https://nextjs.org/) - React framework
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+
+## 📞 Support
+
+If you have any questions or need help:
+
+- Create an [issue](https://github.com/your-repo/issues) on GitHub
+- Join our [Discord](https://discord.gg/your-server) community
+- Check the [documentation](https://docs.kaigan-dex.com)
+
+---
+
+**Built with ❤️ on Solana** | **Trade with confidence on Kaigan DEX** 🚀
