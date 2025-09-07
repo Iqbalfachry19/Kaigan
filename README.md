@@ -138,32 +138,7 @@ Before running this application, make sure you have:
 3. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📁 Project Structure
-kaigan-dex/
-├── frontend/ # Next.js frontend application
-│ ├── src/
-│ │ ├── app/ # Next.js 13+ App Router
-│ │ │ ├── layout.tsx # Root layout
-│ │ │ ├── page.tsx # Main page
-│ │ │ └── globals.css # Global styles
-│ │ ├── components/ # React components
-│ │ │ ├── OrderForm.tsx # Order placement form
-│ │ │ ├── OrderBook.tsx # Live order book
-│ │ │ ├── PriceChart.tsx # TradingView charts
-│ │ │ ├── TradingStats.tsx# Market statistics
-│ │ │ └── WalletButton.tsx# Wallet connection
-│ │ ├── hooks/ # Custom React hooks
-│ │ └── lib/ # Utility libraries
-│ └── package.json
-├── programs/ # Anchor smart contracts
-│ └── clob/
-│ ├── src/
-│ │ └── lib.rs # Main smart contract
-│ └── Cargo.toml
-├── tests/ # Test files
-├── migrations/ # Deployment scripts
-├── Anchor.toml # Anchor configuration
-└── README.md # This file
+
 
 ## 🔧 Configuration
 
