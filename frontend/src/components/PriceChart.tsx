@@ -69,7 +69,14 @@ class DataFeed {
     onErrorCallback: any
   ) {
     // Mock historical data
-    const bars = [];
+    const bars: {
+      time: number;
+      low: number;
+      high: number;
+      open: number;
+      close: number;
+      volume: number;
+    }[] = [];
     const currentTime = Date.now();
 
     // Generate mock OHLC data for the last 100 periods
