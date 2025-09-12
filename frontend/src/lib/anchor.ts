@@ -1,12 +1,12 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { Connection, PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js";
 import { BN } from "bn.js";
-
-const PROGRAM_ID = new PublicKey("E2WSY8KFFKuN75GvEMtZ7tjkJy3bpkBxJB4YWX5jRSp5");
+import bs58 from "bs58";
+const PROGRAM_ID = new PublicKey("FhxmHdczQUm3unCvVN6EWpbv5s3ivf5jJZ5U6fyc1gwn");
 
 // Account discriminators from the IDL
 const ACCOUNT_DISCRIMINATORS = {
-  market: [175, 175, 109, 31, 56, 222, 53, 138],
+  market: [219, 190, 213, 55, 0, 227, 198, 154],
   order: [134, 173, 223, 185, 77, 86, 28, 51],
 };
 
@@ -19,18 +19,44 @@ const INSTRUCTION_DISCRIMINATORS = {
   get_orderbook: [190, 188, 5, 239, 206, 181, 224, 12],
 };
 
+// Enums from IDL
+export enum Side {
+  Buy = 0,
+  Sell = 1,
+}
+
+export enum OrderStatus {
+  Active = 0,
+  Filled = 1,
+  Cancelled = 2,
+}
+
+// Updated interface to match IDL Market struct
 export interface MarketData {
   marketId: number;
+  authority: PublicKey;
   baseMint: PublicKey;
   quoteMint: PublicKey;
-  authority: PublicKey;
-  createdAt: number;
-  isActive: boolean;
+  bump: number;
+}
+
+export interface OrderData {
+  orderId: number;
+  user: PublicKey;
+  market: PublicKey;
+  side: Side;
+  price: number;
+  quantity: number;
+  filledQuantity: number;
+  timestamp: number;
+  status: OrderStatus;
+  bump: number;
 }
 
 export class CLOBProgram {
   private provider: AnchorProvider;
   private programId: PublicKey;
+  account: any;
 
   constructor(provider: AnchorProvider) {
     this.provider = provider;
@@ -70,21 +96,19 @@ export class CLOBProgram {
         return null;
       }
 
-      // Parse market data
-      const parsedMarketId = Number(data.readBigUInt64LE(8));
-      const baseMint = new PublicKey(data.slice(16, 48));
-      const quoteMint = new PublicKey(data.slice(48, 80));
-      const authority = new PublicKey(data.slice(80, 112));
-      const createdAt = Number(data.readBigUInt64LE(112));
-      const isActive = data[120] === 1;
+      // Parse market data according to IDL structure
+      const marketIdParsed = Number(data.readBigUInt64LE(8));
+      const authority = new PublicKey(data.slice(16, 48));
+      const baseMint = new PublicKey(data.slice(48, 80));
+      const quoteMint = new PublicKey(data.slice(80, 112));
+      const bump = data[112];
 
       return {
-        marketId: parsedMarketId,
+        marketId: marketIdParsed,
+        authority,
         baseMint,
         quoteMint,
-        authority,
-        createdAt,
-        isActive,
+        bump,
       };
     } catch (error) {
       console.error("Error fetching market data:", error);
@@ -92,6 +116,7 @@ export class CLOBProgram {
     }
   }
 
+  // Fixed initialize_market instruction to match IDL
   async initializeMarket(marketId: number, baseMint: PublicKey, quoteMint: PublicKey) {
     const marketPda = this.getMarketPda(marketId);
     
@@ -105,6 +130,8 @@ export class CLOBProgram {
     const instruction = new TransactionInstruction({
       keys: [
         { pubkey: marketPda, isSigner: false, isWritable: true },
+        { pubkey: baseMint, isSigner: false, isWritable: false },
+        { pubkey: quoteMint, isSigner: false, isWritable: false },
         { pubkey: this.provider.wallet.publicKey, isSigner: true, isWritable: true },
         { pubkey: PublicKey.default, isSigner: false, isWritable: false },
       ],
@@ -118,16 +145,14 @@ export class CLOBProgram {
     return signature;
   }
 
-  async placeOrder(orderId: number, side: 'buy' | 'sell', price: number, quantity: number) {
+  async placeOrder(orderId: number, side: Side, price: number, quantity: number) {
     const orderPda = this.getOrderPda(orderId);
     const marketPda = this.getMarketPda(1); // Default market ID
-    
-    const sideEnum = side === 'buy' ? 0 : 1; // 0 for Buy, 1 for Sell
     
     const data = Buffer.concat([
       Buffer.from(INSTRUCTION_DISCRIMINATORS.place_order),
       new BN(orderId).toArrayLike(Buffer, 'le', 8),
-      Buffer.from([sideEnum]),
+      Buffer.from([side]), // Single byte for enum
       new BN(price).toArrayLike(Buffer, 'le', 8),
       new BN(quantity).toArrayLike(Buffer, 'le', 8),
     ]);
@@ -137,6 +162,7 @@ export class CLOBProgram {
         { pubkey: orderPda, isSigner: false, isWritable: true },
         { pubkey: this.provider.wallet.publicKey, isSigner: true, isWritable: true },
         { pubkey: marketPda, isSigner: false, isWritable: false },
+        { pubkey: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"), isSigner: false, isWritable: false },
         { pubkey: PublicKey.default, isSigner: false, isWritable: false },
       ],
       programId: this.programId,
@@ -171,7 +197,7 @@ export class CLOBProgram {
     return signature;
   }
 
-  async getOrder(orderId: number): Promise<any | null> {
+  async getOrder(orderId: number): Promise<OrderData | null> {
     const orderPda = this.getOrderPda(orderId);
     
     try {
@@ -188,25 +214,20 @@ export class CLOBProgram {
         return null;
       }
 
-      // Parse order data
-      const parsedOrderId = Number(data.readBigUInt64LE(8));
+      // Parse order data according to IDL structure
+      const orderIdParsed = Number(data.readBigUInt64LE(8));
       const user = new PublicKey(data.slice(16, 48));
       const market = new PublicKey(data.slice(48, 80));
-      const sideByte = data[80];
-      const side = sideByte === 0 ? { buy: {} } : { sell: {} };
+      const side = data[80] as Side;
       const price = Number(data.readBigUInt64LE(81));
       const quantity = Number(data.readBigUInt64LE(89));
       const filledQuantity = Number(data.readBigUInt64LE(97));
       const timestamp = Number(data.readBigUInt64LE(105));
-      const statusByte = data[113];
-      let status;
-      if (statusByte === 0) status = { active: {} };
-      else if (statusByte === 1) status = { filled: {} };
-      else status = { cancelled: {} };
+      const status = data[113] as OrderStatus;
       const bump = data[114];
 
       return {
-        orderId: parsedOrderId,
+        orderId: orderIdParsed,
         user,
         market,
         side,
@@ -220,6 +241,48 @@ export class CLOBProgram {
     } catch (error) {
       console.error("Error fetching order:", error);
       return null;
+    }
+  }
+
+  async getAllOrdersForMarket(marketId: number): Promise<{ pubkey: PublicKey; account: { data: Buffer } }[]> {
+    try {
+      const marketPda = this.getMarketPda(marketId);
+      const orderDiscriminator = ACCOUNT_DISCRIMINATORS.order;
+      
+      // Debug logging
+      console.log("Market PDA:", marketPda.toString());
+      console.log("Market PDA Buffer base64:", marketPda.toBuffer().toString('base64'));
+      console.log("Order discriminator base64:", Buffer.from(orderDiscriminator).toString('base64'));
+      
+      // Get all program accounts
+      const accounts = await this.provider.connection.getProgramAccounts(this.programId, {
+        filters: [
+          {
+            memcmp: {
+              offset: 0,
+              bytes: bs58.encode(Buffer.from(orderDiscriminator)),
+            },
+          },
+          {
+            memcmp: {
+              offset: 48, // offset to market field
+            bytes: bs58.encode(marketPda.toBuffer()),
+            },
+          },
+        ],
+      });
+
+      console.log(`Found ${accounts.length} order accounts for market ${marketId}`);
+      
+      return accounts.map(account => ({
+        pubkey: account.pubkey,
+        account: {
+          data: account.account.data,
+        },
+      }));
+    } catch (error) {
+      console.error("Error fetching all orders for market:", error);
+      return [];
     }
   }
 

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.31.1",
+    "@solana/spl-token": "^0.4.0",
+    "@solana/spl-token-registry": "^0.2.4574",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-phantom": "^0.9.28",
     "@solana/wallet-adapter-react": "^0.15.35",
@@ -17,7 +19,10 @@
     "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.91.37",
     "@tailwindcss/postcss": "^4.1.13",
+    "@pythnetwork/client": "^2.21.0",
+    "@pythnetwork/pyth-solana-receiver": "^0.6.0",
     "bn.js": "^5.2.1",
+    "bs58": "^6.0.0",
     "lightweight-charts": "^4.1.5",
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
@@ -25,8 +30,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hot-toast": "^2.4.1",
-    "tailwindcss": "^4.1.13",
-    "tradingview": "^1.0.2"
+    "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.13",

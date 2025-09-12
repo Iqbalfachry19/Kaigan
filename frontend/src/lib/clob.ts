@@ -3,7 +3,7 @@ export type Clob = {
   "name": "clob",
   "instructions": [
     {
-      "name": "cancelOrder",
+      "name": "cancel_order",
       "accounts": [
         {
           "name": "order",
@@ -19,7 +19,7 @@ export type Clob = {
       "args": []
     },
     {
-      "name": "fillOrder",
+      "name": "fill_order",
       "accounts": [
         {
           "name": "order",
@@ -27,20 +27,50 @@ export type Clob = {
           "isSigner": false
         },
         {
-          "name": "filler",
-          "isMut": true,
+          "name": "buyer",
+          "isMut": false,
           "isSigner": true
+        },
+        {
+          "name": "seller",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "buyer_base_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyer_quote_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "seller_base_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "seller_quote_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "token_program",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "fillQuantity",
+          "name": "fill_quantity",
           "type": "u64"
         }
       ]
     },
     {
-      "name": "getOrderbook",
+      "name": "get_orderbook",
       "accounts": [
         {
           "name": "market",
@@ -51,11 +81,21 @@ export type Clob = {
       "args": []
     },
     {
-      "name": "initializeMarket",
+      "name": "initialize_market",
       "accounts": [
         {
           "name": "market",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "base_mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "quote_mint",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -64,28 +104,28 @@ export type Clob = {
           "isSigner": true
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "marketId",
+          "name": "market_id",
           "type": "u64"
         },
         {
-          "name": "baseMint",
-          "type": "publicKey"
+          "name": "base_mint",
+          "type": "pubkey"
         },
         {
-          "name": "quoteMint",
-          "type": "publicKey"
+          "name": "quote_mint",
+          "type": "pubkey"
         }
       ]
     },
     {
-      "name": "placeOrder",
+      "name": "place_order",
       "accounts": [
         {
           "name": "order",
@@ -103,14 +143,19 @@ export type Clob = {
           "isSigner": false
         },
         {
-          "name": "systemProgram",
+          "name": "token_program",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "system_program",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "orderId",
+          "name": "order_id",
           "type": "u64"
         },
         {
@@ -132,25 +177,25 @@ export type Clob = {
   ],
   "accounts": [
     {
-      "name": "market",
+      "name": "Market",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "marketId",
+            "name": "market_id",
             "type": "u64"
           },
           {
             "name": "authority",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
-            "name": "baseMint",
-            "type": "publicKey"
+            "name": "base_mint",
+            "type": "pubkey"
           },
           {
-            "name": "quoteMint",
-            "type": "publicKey"
+            "name": "quote_mint",
+            "type": "pubkey"
           },
           {
             "name": "bump",
@@ -160,21 +205,21 @@ export type Clob = {
       }
     },
     {
-      "name": "order",
+      "name": "Order",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "orderId",
+            "name": "order_id",
             "type": "u64"
           },
           {
             "name": "user",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "market",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "side",
@@ -191,7 +236,7 @@ export type Clob = {
             "type": "u64"
           },
           {
-            "name": "filledQuantity",
+            "name": "filled_quantity",
             "type": "u64"
           },
           {
@@ -270,6 +315,11 @@ export type Clob = {
       "code": 6004,
       "name": "Unauthorized",
       "msg": "Unauthorized"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds"
     }
   ]
 };
@@ -279,7 +329,7 @@ export const IDL: Clob = {
   "name": "clob",
   "instructions": [
     {
-      "name": "cancelOrder",
+      "name": "cancel_order",
       "accounts": [
         {
           "name": "order",
@@ -295,7 +345,7 @@ export const IDL: Clob = {
       "args": []
     },
     {
-      "name": "fillOrder",
+      "name": "fill_order",
       "accounts": [
         {
           "name": "order",
@@ -303,20 +353,50 @@ export const IDL: Clob = {
           "isSigner": false
         },
         {
-          "name": "filler",
-          "isMut": true,
+          "name": "buyer",
+          "isMut": false,
           "isSigner": true
+        },
+        {
+          "name": "seller",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "buyer_base_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyer_quote_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "seller_base_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "seller_quote_token",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "token_program",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "fillQuantity",
+          "name": "fill_quantity",
           "type": "u64"
         }
       ]
     },
     {
-      "name": "getOrderbook",
+      "name": "get_orderbook",
       "accounts": [
         {
           "name": "market",
@@ -327,11 +407,21 @@ export const IDL: Clob = {
       "args": []
     },
     {
-      "name": "initializeMarket",
+      "name": "initialize_market",
       "accounts": [
         {
           "name": "market",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "base_mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "quote_mint",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -340,28 +430,28 @@ export const IDL: Clob = {
           "isSigner": true
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "marketId",
+          "name": "market_id",
           "type": "u64"
         },
         {
-          "name": "baseMint",
-          "type": "publicKey"
+          "name": "base_mint",
+          "type": "pubkey"
         },
         {
-          "name": "quoteMint",
-          "type": "publicKey"
+          "name": "quote_mint",
+          "type": "pubkey"
         }
       ]
     },
     {
-      "name": "placeOrder",
+      "name": "place_order",
       "accounts": [
         {
           "name": "order",
@@ -379,14 +469,19 @@ export const IDL: Clob = {
           "isSigner": false
         },
         {
-          "name": "systemProgram",
+          "name": "token_program",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "system_program",
           "isMut": false,
           "isSigner": false
         }
       ],
       "args": [
         {
-          "name": "orderId",
+          "name": "order_id",
           "type": "u64"
         },
         {
@@ -408,25 +503,25 @@ export const IDL: Clob = {
   ],
   "accounts": [
     {
-      "name": "market",
+      "name": "Market",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "marketId",
+            "name": "market_id",
             "type": "u64"
           },
           {
             "name": "authority",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
-            "name": "baseMint",
-            "type": "publicKey"
+            "name": "base_mint",
+            "type": "pubkey"
           },
           {
-            "name": "quoteMint",
-            "type": "publicKey"
+            "name": "quote_mint",
+            "type": "pubkey"
           },
           {
             "name": "bump",
@@ -436,21 +531,21 @@ export const IDL: Clob = {
       }
     },
     {
-      "name": "order",
+      "name": "Order",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "orderId",
+            "name": "order_id",
             "type": "u64"
           },
           {
             "name": "user",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "market",
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "side",
@@ -467,7 +562,7 @@ export const IDL: Clob = {
             "type": "u64"
           },
           {
-            "name": "filledQuantity",
+            "name": "filled_quantity",
             "type": "u64"
           },
           {
@@ -546,8 +641,11 @@ export const IDL: Clob = {
       "code": 6004,
       "name": "Unauthorized",
       "msg": "Unauthorized"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds"
     }
   ]
 };
-
-

@@ -203,277 +203,380 @@ export default function Home() {
           {/* Tabbed Sections - Open Orders, Trade History, Settled Balance */}
           {marketInitialized && !isInitializing && !isCheckingMarket && (
             <div className="mt-6">
-              <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                {/* Tab Navigation */}
-                <div className="flex bg-gray-700">
-                  <button
-                    onClick={() => setActiveTab("orders")}
-                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all ${
-                      activeTab === "orders"
-                        ? "bg-purple-600 text-white"
-                        : "text-gray-400 hover:text-white hover:bg-gray-600"
-                    }`}
-                  >
-                    Open Orders
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("history")}
-                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all ${
-                      activeTab === "history"
-                        ? "bg-purple-600 text-white"
-                        : "text-gray-400 hover:text-white hover:bg-gray-600"
-                    }`}
-                  >
-                    Trade History
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("balance")}
-                    className={`flex-1 py-3 px-4 text-sm font-medium transition-all ${
-                      activeTab === "balance"
-                        ? "bg-purple-600 text-white"
-                        : "text-gray-400 hover:text-white hover:bg-gray-600"
-                    }`}
-                  >
-                    Settled Balance
-                  </button>
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                {/* Left Column - Open Orders */}
+                <div className="xl:col-span-8">
+                  <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                    {/* Tab Navigation */}
+                    <div className="flex bg-gray-700">
+                      <button
+                        onClick={() => setActiveTab("orders")}
+                        className={`flex-1 py-3 px-4 text-sm font-medium transition-all ${
+                          activeTab === "orders"
+                            ? "bg-purple-600 text-white"
+                            : "text-gray-400 hover:text-white hover:bg-gray-600"
+                        }`}
+                      >
+                        Open Orders
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("history")}
+                        className={`flex-1 py-3 px-4 text-sm font-medium transition-all ${
+                          activeTab === "history"
+                            ? "bg-purple-600 text-white"
+                            : "text-gray-400 hover:text-white hover:bg-gray-600"
+                        }`}
+                      >
+                        Trade History
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("balance")}
+                        className={`flex-1 py-3 px-4 text-sm font-medium transition-all ${
+                          activeTab === "balance"
+                            ? "bg-purple-600 text-white"
+                            : "text-gray-400 hover:text-white hover:bg-gray-600"
+                        }`}
+                      >
+                        Settled Balance
+                      </button>
+                    </div>
+
+                    {/* Tab Content */}
+                    <div className="p-6">
+                      {/* Open Orders Tab */}
+                      {activeTab === "orders" && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-white">
+                              Open Orders
+                            </h3>
+                            <span className="text-sm text-gray-400">
+                              3 active orders
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {/* Mock open orders */}
+                            <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">
+                                    B
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-white">
+                                    Buy SOL
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    0.03845 USDC
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm text-white">
+                                  1.5 SOL
+                                </div>
+                                <div className="text-xs text-green-400">
+                                  Filled: 0.5 SOL
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">
+                                    S
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-white">
+                                    Sell SOL
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    0.03865 USDC
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm text-white">
+                                  2.0 SOL
+                                </div>
+                                <div className="text-xs text-yellow-400">
+                                  Pending
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">
+                                    B
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-white">
+                                    Buy SOL
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    0.03832 USDC
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm text-white">
+                                  0.8 SOL
+                                </div>
+                                <div className="text-xs text-blue-400">
+                                  Partial: 0.3 SOL
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Trade History Tab */}
+                      {activeTab === "history" && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-white">
+                              Trade History
+                            </h3>
+                            <span className="text-sm text-gray-400">
+                              Last 24h
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {/* Mock trade history */}
+                            <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">
+                                    B
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-white">
+                                    Bought SOL
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    0.03845 USDC
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm text-white">
+                                  +0.5 SOL
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  2 hours ago
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">
+                                    S
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-white">
+                                    Sold SOL
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    0.03855 USDC
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm text-white">
+                                  -1.2 SOL
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  4 hours ago
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                  <span className="text-white text-xs font-bold">
+                                    B
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-white">
+                                    Bought SOL
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    0.03832 USDC
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-sm text-white">
+                                  +0.8 SOL
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  6 hours ago
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Settled Balance Tab */}
+                      {activeTab === "balance" && (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-white">
+                              Settled Balance
+                            </h3>
+                            <span className="text-sm text-gray-400">
+                              Available funds
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="p-4 bg-gray-700/50 rounded-lg">
+                              <div className="text-xs text-gray-400 mb-1">
+                                SOL Balance
+                              </div>
+                              <div className="text-lg font-bold text-white">
+                                2.45 SOL
+                              </div>
+                              <div className="text-xs text-gray-400">
+                                ≈ $94.23
+                              </div>
+                            </div>
+
+                            <div className="p-4 bg-gray-700/50 rounded-lg">
+                              <div className="text-xs text-gray-400 mb-1">
+                                USDC Balance
+                              </div>
+                              <div className="text-lg font-bold text-white">
+                                125.80 USDC
+                              </div>
+                              <div className="text-xs text-gray-400">
+                                $125.80
+                              </div>
+                            </div>
+
+                            <div className="p-4 bg-gray-700/50 rounded-lg">
+                              <div className="text-xs text-gray-400 mb-1">
+                                Total Value
+                              </div>
+                              <div className="text-lg font-bold text-white">
+                                $220.03
+                              </div>
+                              <div className="text-xs text-green-400">
+                                +12.34%
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Tab Content */}
-                <div className="p-6">
-                  {/* Open Orders Tab */}
-                  {activeTab === "orders" && (
+                {/* Right Column - Asset Info */}
+                <div className="xl:col-span-4">
+                  <div className="bg-gray-800 rounded-lg shadow-lg p-4">
+                    <h3 className="text-sm font-bold text-white mb-4">
+                      Asset Info
+                    </h3>
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-white">
-                          Open Orders
-                        </h3>
-                        <span className="text-sm text-gray-400">
-                          3 active orders
-                        </span>
+                      {/* SOL Section */}
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">
+                              SOL
+                            </span>
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white">
+                              SOL
+                            </div>
+                            <div className="text-xs text-gray-400">Solana</div>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2">
+                          <div className="bg-gray-700/50 flex justify-between rounded p-2">
+                            <div className="text-xs text-gray-400">Locked</div>
+                            <div className="text-sm font-bold text-white">
+                              0
+                            </div>
+                          </div>
+                          <div className="bg-gray-700/50 flex justify-between rounded p-2">
+                            <div className="text-xs text-gray-400">
+                              Free Balance
+                            </div>
+                            <div className="text-sm font-bold text-white">
+                              0.00
+                            </div>
+                          </div>
+                          <div className="bg-gray-700/50 flex justify-between rounded p-2">
+                            <div className="text-xs text-gray-400">
+                              Wallet Balance
+                            </div>
+                            <div className="text-sm font-bold text-white">
+                              0
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="space-y-3">
-                        {/* Mock open orders */}
-                        <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">
-                                B
-                              </span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                Buy SOL
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                0.03845 USDC
-                              </div>
-                            </div>
+
+                      {/* USDC Section */}
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">
+                              USDC
+                            </span>
                           </div>
-                          <div className="text-right">
-                            <div className="text-sm text-white">1.5 SOL</div>
-                            <div className="text-xs text-green-400">
-                              Filled: 0.5 SOL
+                          <div>
+                            <div className="text-sm font-bold text-white">
+                              USDC
+                            </div>
+                            <div className="text-xs text-gray-400">
+                              USD Coin
                             </div>
                           </div>
                         </div>
-
-                        <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">
-                                S
-                              </span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                Sell SOL
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                0.03865 USDC
-                              </div>
+                        <div className="grid grid-cols-1 gap-2">
+                          <div className="bg-gray-700/50 flex justify-between rounded p-2">
+                            <div className="text-xs text-gray-400">Locked</div>
+                            <div className="text-sm font-bold text-white">
+                              0
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-sm text-white">2.0 SOL</div>
-                            <div className="text-xs text-yellow-400">
-                              Pending
+                          <div className="bg-gray-700/50 flex justify-between rounded p-2">
+                            <div className="text-xs text-gray-400">
+                              Free Balance
+                            </div>
+                            <div className="text-sm font-bold text-white">
+                              0.00
                             </div>
                           </div>
-                        </div>
-
-                        <div className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">
-                                B
-                              </span>
+                          <div className="bg-gray-700/50 flex justify-between rounded p-2">
+                            <div className="text-xs text-gray-400">
+                              Wallet Balance
                             </div>
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                Buy SOL
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                0.03832 USDC
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-white">0.8 SOL</div>
-                            <div className="text-xs text-blue-400">
-                              Partial: 0.3 SOL
+                            <div className="text-sm font-bold text-white">
+                              0
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
-
-                  {/* Trade History Tab */}
-                  {activeTab === "history" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-white">
-                          Trade History
-                        </h3>
-                        <span className="text-sm text-gray-400">Last 24h</span>
-                      </div>
-                      <div className="space-y-3">
-                        {/* Mock trade history */}
-                        <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">
-                                B
-                              </span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                Bought SOL
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                0.03845 USDC
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-white">+0.5 SOL</div>
-                            <div className="text-xs text-gray-400">
-                              2 hours ago
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">
-                                S
-                              </span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                Sold SOL
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                0.03855 USDC
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-white">-1.2 SOL</div>
-                            <div className="text-xs text-gray-400">
-                              4 hours ago
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">
-                                B
-                              </span>
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-white">
-                                Bought SOL
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                0.03832 USDC
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-white">+0.8 SOL</div>
-                            <div className="text-xs text-gray-400">
-                              6 hours ago
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Settled Balance Tab */}
-                  {activeTab === "balance" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-white">
-                          Settled Balance
-                        </h3>
-                        <span className="text-sm text-gray-400">
-                          Available funds
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="p-4 bg-gray-700/50 rounded-lg">
-                          <div className="text-xs text-gray-400 mb-1">
-                            SOL Balance
-                          </div>
-                          <div className="text-lg font-bold text-white">
-                            2.45 SOL
-                          </div>
-                          <div className="text-xs text-gray-400">≈ $94.23</div>
-                        </div>
-
-                        <div className="p-4 bg-gray-700/50 rounded-lg">
-                          <div className="text-xs text-gray-400 mb-1">
-                            USDC Balance
-                          </div>
-                          <div className="text-lg font-bold text-white">
-                            125.80 USDC
-                          </div>
-                          <div className="text-xs text-gray-400">$125.80</div>
-                        </div>
-
-                        <div className="p-4 bg-gray-700/50 rounded-lg">
-                          <div className="text-xs text-gray-400 mb-1">
-                            Total Value
-                          </div>
-                          <div className="text-lg font-bold text-white">
-                            $220.03
-                          </div>
-                          <div className="text-xs text-green-400">+12.34%</div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Market Info Display */}
-          {marketData && (
-            <div className="bg-gray-800 rounded-lg p-3 shadow-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-400">Market Active</span>
-                </div>
-                <div className="text-xs text-gray-500">
-                  Created:{" "}
-                  {new Date(marketData.createdAt * 1000).toLocaleString()}
+                  </div>
                 </div>
               </div>
             </div>

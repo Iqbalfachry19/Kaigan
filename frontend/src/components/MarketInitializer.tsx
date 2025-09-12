@@ -43,7 +43,7 @@ export function MarketInitializer({
         "So11111111111111111111111111111111111111112"
       );
       const usdcMint = new PublicKey(
-        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+        "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
       );
 
       const tx = await program.initializeMarket(

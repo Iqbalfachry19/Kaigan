@@ -22,13 +22,13 @@ const TRADING_PAIRS: TradingPair[] = [
     symbol: "SOL/USDC",
     baseToken: "SOL",
     quoteToken: "USDC",
-    currentPrice: 0.03832,
-    usdPrice: 0.12,
+    currentPrice: 239.1,
+    usdPrice: 239.1,
     priceChange24h: 0.44,
     volume24h: 497310,
     volume24hUSD: 64782.6,
-    high24h: 0.03885,
-    low24h: 0.03814,
+    high24h: 239.1,
+    low24h: 239.1,
     activeOrders: 42,
     totalLiquidity: "1.2M",
   },
@@ -161,7 +161,7 @@ export function TradingStats() {
         <div className="flex items-center space-x-4">
           <div className="text-right">
             <div className="text-xs text-gray-400">
-              Price ({currentStats.baseToken})
+              Price ({currentStats.quoteToken})
             </div>
             <div className="text-sm font-bold text-white">
               {currentStats.currentPrice.toFixed(
@@ -195,7 +195,7 @@ export function TradingStats() {
         {/* 24h Volume */}
         <div className="text-right">
           <div className="text-xs text-gray-400">
-            24h Volume ({currentStats.baseToken})
+            24h Volume ({currentStats.quoteToken})
           </div>
           <div className="text-sm font-bold text-white">
             {currentStats.volume24h.toLocaleString()}
@@ -216,7 +216,7 @@ export function TradingStats() {
                 : 2
             )}
           </div>
-          <div className="text-xs text-gray-300">{currentStats.baseToken}</div>
+          <div className="text-xs text-gray-300">{currentStats.quoteToken}</div>
         </div>
 
         {/* 24h Low */}
@@ -230,7 +230,7 @@ export function TradingStats() {
                 : 2
             )}
           </div>
-          <div className="text-xs text-gray-300">{currentStats.baseToken}</div>
+          <div className="text-xs text-gray-300">{currentStats.quoteToken}</div>
         </div>
 
         {/* Market Details */}

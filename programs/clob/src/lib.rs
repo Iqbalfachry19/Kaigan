@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::system_program;
-
-declare_id!("E2WSY8KFFKuN75GvEMtZ7tjkJy3bpkBxJB4YWX5jRSp5");
+use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+declare_id!("FhxmHdczQUm3unCvVN6EWpbv5s3ivf5jJZ5U6fyc1gwn");
 
 #[program]
 pub mod clob {
@@ -23,7 +22,12 @@ pub mod clob {
         market.quote_mint = quote_mint;
         market.bump = ctx.bumps.market;
 
-        msg!("Market initialized: {}", market_id);
+        msg!(
+            "Market initialized: {} with base mint {} and quote mint {}",
+            market_id,
+            base_mint,
+            quote_mint
+        );
         Ok(())
     }
 
@@ -82,7 +86,7 @@ pub mod clob {
     // Fill order (simplified matching)
     pub fn fill_order(ctx: Context<FillOrder>, fill_quantity: u64) -> Result<()> {
         let order = &mut ctx.accounts.order;
-        let filler = &ctx.accounts.filler;
+        let filler = &ctx.accounts.seller;
 
         require!(
             order.status == OrderStatus::Active,
@@ -93,6 +97,68 @@ pub mod clob {
             CLOBError::InvalidFillQuantity
         );
 
+        // Execute token transfers between parties
+        match order.side {
+            Side::Buy => {
+                // Buyer wants base tokens, seller provides base tokens
+                // Transfer base tokens from seller to buyer
+                token::transfer(
+                    CpiContext::new(
+                        ctx.accounts.token_program.to_account_info(),
+                        Transfer {
+                            from: ctx.accounts.seller_base_token.to_account_info(),
+                            to: ctx.accounts.buyer_base_token.to_account_info(),
+                            authority: filler.to_account_info(),
+                        },
+                    ),
+                    fill_quantity,
+                )?;
+
+                // Transfer quote tokens from buyer to seller
+                let payment_amount = order.price * fill_quantity;
+                token::transfer(
+                    CpiContext::new(
+                        ctx.accounts.token_program.to_account_info(),
+                        Transfer {
+                            from: ctx.accounts.buyer_quote_token.to_account_info(),
+                            to: ctx.accounts.seller_quote_token.to_account_info(),
+                            authority: ctx.accounts.buyer.to_account_info(),
+                        },
+                    ),
+                    payment_amount,
+                )?;
+            }
+            Side::Sell => {
+                // Seller wants quote tokens, buyer provides quote tokens
+                // Transfer quote tokens from buyer to seller
+                let payment_amount = order.price * fill_quantity;
+                token::transfer(
+                    CpiContext::new(
+                        ctx.accounts.token_program.to_account_info(),
+                        Transfer {
+                            from: ctx.accounts.buyer_quote_token.to_account_info(),
+                            to: ctx.accounts.seller_quote_token.to_account_info(),
+                            authority: ctx.accounts.buyer.to_account_info(),
+                        },
+                    ),
+                    payment_amount,
+                )?;
+
+                // Transfer base tokens from seller to buyer
+                token::transfer(
+                    CpiContext::new(
+                        ctx.accounts.token_program.to_account_info(),
+                        Transfer {
+                            from: ctx.accounts.seller_base_token.to_account_info(),
+                            to: ctx.accounts.buyer_base_token.to_account_info(),
+                            authority: filler.to_account_info(),
+                        },
+                    ),
+                    fill_quantity,
+                )?;
+            }
+        }
+
         order.filled_quantity += fill_quantity;
 
         if order.filled_quantity >= order.quantity {
@@ -100,7 +166,7 @@ pub mod clob {
         }
 
         msg!(
-            "Order filled: {} - {} filled",
+            "Order filled: {} - {} filled - Token transfers completed",
             order.order_id,
             fill_quantity
         );
@@ -133,6 +199,9 @@ pub struct InitializeMarket<'info> {
     )]
     pub market: Account<'info, Market>,
 
+    pub base_mint: Account<'info, token::Mint>,
+    pub quote_mint: Account<'info, token::Mint>,
+
     #[account(mut)]
     pub authority: Signer<'info>,
 
@@ -156,12 +225,16 @@ pub struct PlaceOrder<'info> {
 
     pub market: Account<'info, Market>,
 
+    pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
 pub struct CancelOrder<'info> {
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = order.status == OrderStatus::Active,
+    )]
     pub order: Account<'info, Order>,
 
     #[account(mut)]
@@ -170,11 +243,28 @@ pub struct CancelOrder<'info> {
 
 #[derive(Accounts)]
 pub struct FillOrder<'info> {
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = order.status == OrderStatus::Active,
+    )]
     pub order: Account<'info, Order>,
 
+    pub buyer: Signer<'info>,
+    pub seller: Signer<'info>,
+
     #[account(mut)]
-    pub filler: Signer<'info>,
+    pub buyer_base_token: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub buyer_quote_token: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub seller_base_token: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub seller_quote_token: Account<'info, TokenAccount>,
+
+    pub token_program: Program<'info, Token>,
 }
 
 #[derive(Accounts)]
@@ -248,4 +338,6 @@ pub enum CLOBError {
     InvalidFillQuantity,
     #[msg("Unauthorized")]
     Unauthorized,
+    #[msg("Insufficient funds")]
+    InsufficientFunds,
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useAnchorProvider } from "../hooks/useAnchorProvider";
-import { getProgram } from "../lib/anchor";
+import { getProgram, Side } from "../lib/anchor";
 import { PublicKey } from "@solana/web3.js";
 import toast from "react-hot-toast";
 
@@ -62,17 +62,17 @@ export function OrderForm({ marketId, onOrderPlaced }: OrderFormProps) {
     try {
       setLoading(true);
       const program = getProgram(provider);
-      const orderId = Date.now();
+      const orderId = Math.floor(Math.random() * 1000000); // Use random ID to avoid conflicts
 
       const orderPrice =
         orderType === "market"
-          ? 25000000
-          : Math.floor(parseFloat(price) * 1000000); // 25 USD if market
-      const orderQuantity = Math.floor(parseFloat(quantity) * 1000000);
+          ? 239100000 // 239.10 USDC in smallest unit (6 decimals)
+          : Math.floor(parseFloat(price) * 1000000); // Convert to smallest unit
+      const orderQuantity = Math.floor(parseFloat(quantity) * 1000000); // Convert to smallest unit
 
       const tx = await program.placeOrder(
         orderId,
-        side,
+        side === "buy" ? Side.Buy : Side.Sell,
         orderPrice,
         orderQuantity
       );
