@@ -259,7 +259,6 @@ export function OrderBook({ marketId, refreshTrigger }: OrderBookProps) {
 
   const tabs: { id: TabType; icon: string; title: string }[] = [
     { id: "combined", icon: "📊", title: "Combined View" },
-    { id: "side-by-side", icon: "⬌", title: "Side by Side View" },
     { id: "buy-only", icon: "📈", title: "Buy Orders Only" },
     { id: "sell-only", icon: "📉", title: "Sell Orders Only" },
   ];
@@ -362,66 +361,6 @@ export function OrderBook({ marketId, refreshTrigger }: OrderBookProps) {
     </>
   );
 
-  const renderSideBySideView = () => (
-    <div className="grid grid-cols-2 gap-6">
-      {/* Left: Sell Orders */}
-      <div>
-        <h4 className="text-md font-medium text-red-600 dark:text-red-400 mb-3">
-          Sell Orders
-        </h4>
-        <div className="space-y-1 max-h-40 overflow-y-auto">
-          {sellPriceLevels.length === 0 ? (
-            <div className="text-gray-500 text-sm text-center py-4">
-              No sell orders
-            </div>
-          ) : (
-            sellPriceLevels.slice(0, 8).map((level, index) => (
-              <div
-                key={`sell-side-${level.price}-${index}`}
-                className="flex justify-between text-sm bg-red-50 dark:bg-red-900/20 p-2 rounded"
-              >
-                <span className="text-red-600 dark:text-red-400 font-mono">
-                  ${(level.price / 1000000).toFixed(2)}
-                </span>
-                <span className="text-gray-700 dark:text-gray-300 font-mono">
-                  {(level.totalQuantity / 1000000).toFixed(4)}
-                </span>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      {/* Right: Buy Orders */}
-      <div>
-        <h4 className="text-md font-medium text-green-600 dark:text-green-400 mb-3">
-          Buy Orders
-        </h4>
-        <div className="space-y-1 max-h-40 overflow-y-auto">
-          {buyPriceLevels.length === 0 ? (
-            <div className="text-gray-500 text-sm text-center py-4">
-              No buy orders
-            </div>
-          ) : (
-            buyPriceLevels.slice(0, 8).map((level, index) => (
-              <div
-                key={`buy-side-${level.price}-${index}`}
-                className="flex justify-between text-sm bg-green-50 dark:bg-green-900/20 p-2 rounded"
-              >
-                <span className="text-green-600 dark:text-green-400 font-mono">
-                  ${(level.price / 1000000).toFixed(2)}
-                </span>
-                <span className="text-gray-700 dark:text-gray-300 font-mono">
-                  {(level.totalQuantity / 1000000).toFixed(4)}
-                </span>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
   const renderBuyOnlyView = () => (
     <div className="bg-green-50 dark:bg-green-900/10 rounded-lg p-4">
       <div className="flex justify-between items-center mb-3">
@@ -514,8 +453,6 @@ export function OrderBook({ marketId, refreshTrigger }: OrderBookProps) {
     switch (activeTab) {
       case "combined":
         return renderCombinedView();
-      case "side-by-side":
-        return renderSideBySideView();
       case "buy-only":
         return renderBuyOnlyView();
       case "sell-only":
