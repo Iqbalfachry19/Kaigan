@@ -301,6 +301,14 @@ export function OrderBook({ marketId, refreshTrigger }: OrderBookProps) {
                     Σ {((level as any).cumulativeTotal / 1000000).toFixed(4)}
                   </span>
                 </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-gray-700 dark:text-gray-300 font-mono">
+                    {(level.totalQuantity / 1000000).toFixed(4)}
+                  </span>
+                  <span className="text-xs text-gray-500 font-mono">
+                    Σ {((level as any).cumulativeTotal / 1000000).toFixed(4)}
+                  </span>
+                </div>
               </div>
             ))
           )}
