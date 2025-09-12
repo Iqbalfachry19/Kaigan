@@ -293,18 +293,12 @@ export function OrderBook({ marketId, refreshTrigger }: OrderBookProps) {
                     {level.orderCount} order{level.orderCount !== 1 ? "s" : ""}
                   </span>
                 </div>
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col  flex-1">
                   <span className="text-gray-700 dark:text-gray-300 font-mono">
                     {(level.totalQuantity / 1000000).toFixed(4)}
-                  </span>
-                  <span className="text-xs text-gray-500 font-mono">
-                    Σ {((level as any).cumulativeTotal / 1000000).toFixed(4)}
                   </span>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-gray-700 dark:text-gray-300 font-mono">
-                    {(level.totalQuantity / 1000000).toFixed(4)}
-                  </span>
                   <span className="text-xs text-gray-500 font-mono">
                     Σ {((level as any).cumulativeTotal / 1000000).toFixed(4)}
                   </span>
@@ -330,10 +324,6 @@ export function OrderBook({ marketId, refreshTrigger }: OrderBookProps) {
 
       {/* Buy Orders - BOTTOM */}
       <div>
-        <div className="flex justify-between items-center mb-2">
-          <div className="text-sm text-gray-500">Amt. (SOL)</div>
-          <div className="text-sm text-gray-500">Total (USDC)</div>
-        </div>
         <div className="space-y-1 max-h-32 overflow-y-auto">
           {buyPriceLevels.length === 0 ? (
             <div className="text-gray-500 text-sm text-center py-4">
@@ -345,20 +335,22 @@ export function OrderBook({ marketId, refreshTrigger }: OrderBookProps) {
                 key={`buy-${level.price}-${index}`}
                 className="flex justify-between items-center text-sm bg-green-50 dark:bg-green-900/20 p-2 rounded hover:bg-green-900/30 transition-colors cursor-pointer"
               >
-                <div className="flex flex-col items-end flex-1">
-                  <span className="text-gray-700 dark:text-gray-300 font-mono">
-                    {(level.totalQuantity / 1000000).toFixed(4)}
-                  </span>
-                  <span className="text-xs text-gray-500 font-mono">
-                    Σ {((level as any).cumulativeTotal / 1000000).toFixed(4)}
-                  </span>
-                </div>
-                <div className="flex flex-col flex-1">
+                <div className="flex flex-col  flex-1">
                   <span className="text-green-600 dark:text-green-400 font-mono">
                     ${(level.price / 1000000).toFixed(2)}
                   </span>
                   <span className="text-xs text-gray-500">
                     {level.orderCount} order{level.orderCount !== 1 ? "s" : ""}
+                  </span>
+                </div>
+                <div className="flex flex-col  flex-1">
+                  <span className="text-gray-700 dark:text-gray-300 font-mono">
+                    {(level.totalQuantity / 1000000).toFixed(4)}
+                  </span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="text-xs text-gray-500 font-mono">
+                    Σ {((level as any).cumulativeTotal / 1000000).toFixed(4)}
                   </span>
                 </div>
               </div>
